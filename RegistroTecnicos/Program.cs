@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Radzen;
 using RegistroTecnicos.Components;
 using RegistroTecnicos.DAL;
 using RegistroTecnicos.Services;
@@ -12,6 +13,7 @@ builder.Services.AddRazorComponents()
 var ConStr = builder.Configuration.GetConnectionString("ConStr");
 builder.Services.AddDbContext<Context>(Options => Options.UseSqlite(ConStr));
 builder.Services.AddScoped<TecnicoServices>();
+builder.Services.AddRadzenComponents();
 
 var app = builder.Build();
 
