@@ -1,5 +1,4 @@
-﻿@page "/Create"
-@page "/Create/{tecnicoId:int}"
+﻿@page "/Edit/{tecnicoId:int}"
 @inject TecnicoServices tecnicoService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
@@ -9,12 +8,13 @@
     <DataAnnotationsValidator />
     <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
         <div class="card-header bg-primary text-white" style="text-align: center;">
-            <h3> <i class="fas fa-clipboard-list"></i> Registro de Tecnicos</h3>
+            <h3> <i class="fas fa-clipboard-list"></i> Editar Tecnico</h3>
         </div>
 
         <div class="card-body">
-            @* TecnicoId *@
+
             <div class="row">
+
                 <div class="col-md-6 mb-3">
                     <label for="TecnicoId" class="form-label">TecnicoId:</label>
                     <div class="input-group">
@@ -25,16 +25,14 @@
                 </div>
             </div>
 
-            @* Nombres *@
             <div class="mb-3">
                 <label for="Nombres" class="form-label">Nombres:</label>
                 <InputText @bind-Value="Tecnico.Nombres" class="form-control" />
                 <ValidationMessage For="@(() => Tecnico.Nombres)" />
             </div>
 
-            @* SueldoHora *@
             <div class="mb-3">
-                <label for="SueldoHora" class="form-label">SueldoHora:</label>
+                <label for="SueldoHora" class="form-label">Sueldo Hora:</label>
                 <InputNumber @bind-Value="Tecnico.SueldoHora" class="form-control" />
                 <ValidationMessage For="@(() => Tecnico.SueldoHora)" />
             </div>
@@ -44,15 +42,12 @@
         <div class="card-footer bg-light d-flex justify-content-center mt-3">
             <div class="btn-group">
                 <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
-                <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>             
+                <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>
                 <a type="button" href="/Index/" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
             </div>
         </div>
     </div>
 </EditForm>
-
-
-
 
 @code {
     [Parameter]
@@ -95,7 +90,7 @@
     public async Task Guardar()
     {
         var guardo = await tecnicoService.Guardar(this.Tecnico);
-        if(guardo != null)
+        if (guardo != null)
         {
             notificationService.ShowNotification(titulo: "Guardado", mensaje: "Se a guardado correctamente", NotificationSeverity.Success);
         }
@@ -110,7 +105,7 @@
     public async Task Eliminar()
     {
         var eliminado = await tecnicoService.Eliminar(Tecnico.TecnicoId);
-        if(eliminado != null)
+        if (eliminado != null)
         {
             notificationService.ShowNotification(titulo: "Eliminado", mensaje: "Se a eliminado correctamente", NotificationSeverity.Success);
         }
@@ -120,6 +115,5 @@
         }
         Nuevo();
     }
-
 
 }
