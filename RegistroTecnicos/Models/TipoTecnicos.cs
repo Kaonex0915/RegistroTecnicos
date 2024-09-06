@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RegistroTecnicos.Models;
 
-public class TipoTecnico
+public class TipoTecnicos
 {
     [Key]
-    public int TipoTecnicoId { get; set; }
+    public int TipoTecnicosId { get; set; }
     [ForeignKey("TecnicoId")]
     public int TecnicoId { get; set; }
 
