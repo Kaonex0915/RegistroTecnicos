@@ -2,8 +2,8 @@
 
 #nullable disable
 
-namespace RegistroTecnicos.Migrations
-{
+namespace RegistroTecnicos.Migrations;
+
     /// <inheritdoc />
     public partial class inicial : Migration
     {
@@ -32,4 +32,4 @@ namespace RegistroTecnicos.Migrations
                 name: "Tecnicos");
         }
     }
-}
+

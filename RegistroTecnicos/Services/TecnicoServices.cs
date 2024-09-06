@@ -3,8 +3,8 @@ using RegistroTecnicos.DAL;
 using RegistroTecnicos.Models;
 using System.Linq.Expressions;
 
-namespace RegistroTecnicos.Services
-{
+namespace RegistroTecnicos.Services;
+
     public class TecnicoServices
     {
         private readonly Context _context;
@@ -56,4 +56,4 @@ namespace RegistroTecnicos.Services
         }         
     }
 
-}
+

@@ -1,7 +1,7 @@
 ﻿using Radzen;
 
-namespace RegistroTecnicos.Extensors
-{
+namespace RegistroTecnicos.Extensors;
+
     public static class Notificaciones
     {
         public static void ShowNotification(this NotificationService notifier,
@@ -21,4 +21,4 @@ namespace RegistroTecnicos.Extensors
         }
 
     }
-}
+
