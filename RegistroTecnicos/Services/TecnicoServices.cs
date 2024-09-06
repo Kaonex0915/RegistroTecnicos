@@ -55,5 +55,3 @@ namespace RegistroTecnicos.Services;
             return await _context.Tecnicos.AsNoTracking().Where(criterio).ToListAsync();
         }         
     }
-
-
