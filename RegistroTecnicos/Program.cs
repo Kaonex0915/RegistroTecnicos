@@ -13,6 +13,7 @@ builder.Services.AddRazorComponents()
 var ConStr = builder.Configuration.GetConnectionString("ConStr");
 builder.Services.AddDbContext<Context>(Options => Options.UseSqlite(ConStr));
 builder.Services.AddScoped<TecnicoServices>();
+builder.Services.AddScoped<TipoTecnicosServices>();
 builder.Services.AddRadzenComponents();
 
 var app = builder.Build();

@@ -10,7 +10,7 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240906030210_incial")]
+    [Migration("20240907020811_incial")]
     partial class incial
     {
         /// <inheritdoc />
@@ -30,6 +30,9 @@ namespace RegistroTecnicos.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SueldoHora")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TipoTecnicosId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("TecnicoId");

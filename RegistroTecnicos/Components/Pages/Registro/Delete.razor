@@ -4,10 +4,11 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 @inject NotificationService notificationService
+@inject TipoTecnicosServices tipoTecnicosServices
 
 <PageTitle>Eliminar Tecnico</PageTitle>
 
-@if (Tecnico != null)
+@if (tecnico != null)
 {
     <div class="container">
         <div class="card shadow-header">     
@@ -31,9 +32,10 @@
                                         <div class="row">
                                             <div class="col-md-8">
                                                 <ul class="list-unstyled">
-                                                    <li><strong>TecnicoId:</strong> @Tecnico.TecnicoId</li>
-                                                    <li><strong>Nombres:</strong> @Tecnico.Nombres</li>
-                                                    <li><strong>SueldoHora:</strong> @Tecnico.SueldoHora</li>
+                                                    <li><strong>TecnicoId:</strong> @tecnico.TecnicoId</li>
+                                                    <li><strong>Nombres:</strong> @tecnico.Nombres</li>
+                                                    <li><strong>Tipo de Técnico:</strong> @GetTipoTecnicoDescripcion(tecnico.TipoTecnicosId)</li>
+                                                    <li><strong>SueldoHora:</strong> @tecnico.SueldoHora</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -63,19 +65,25 @@ else
     [Parameter]
     public int tecnicoId { get; set; }
 
-    public Tecnicos Tecnico { get; set; } = new Tecnicos();
+    public Tecnicos tecnico { get; set; } = new Tecnicos();
+
+    public TipoTecnicos tipoTecnicos { get; set; } = new TipoTecnicos();
+
+    public List<TipoTecnicos> L_TipoTecnicos { get; set; } = new List<TipoTecnicos>();
 
     protected override async Task OnInitializedAsync()
-    {
-        if (tecnicoId !=0)
+    {        
+        L_TipoTecnicos = await tipoTecnicosServices.ObtenerTipoTecnicos();
+
+        if (tecnicoId != 0)
         {
-            Tecnico = await tecnicoService.Buscar(tecnicoId);
+            tecnico = await tecnicoService.Buscar(tecnicoId);
         }
     }
 
     public async Task Eliminar()
     {
-        if(tecnicoId == 0 || Tecnico == null)
+        if(tecnicoId == 0 || tecnico == null)
         {
             return;
         }
@@ -84,6 +92,12 @@ else
         {
             Volver();
         }
+    }
+
+    private string GetTipoTecnicoDescripcion(int tipoTecnicoId)
+    {        
+        var tipo = L_TipoTecnicos.FirstOrDefault(t => t.TipoTecnicosId == tipoTecnicoId);
+        return tipo?.Descripcion ?? "No disponible";
     }
 
     public void Volver()

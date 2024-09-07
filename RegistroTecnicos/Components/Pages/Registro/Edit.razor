@@ -3,8 +3,9 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 @inject NotificationService notificationService
+@inject TipoTecnicosServices tipoTecnicosServices
 
-<EditForm Model="Tecnico" OnValidSubmit="Guardar">
+<EditForm Model="tecnico" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="card shadow-lg border-0 rounded" style="background-color: #f0f0fa;">
         <div class="card-header bg-primary text-white" style="text-align: center;">
@@ -19,7 +20,7 @@
                     <label for="TecnicoId" class="form-label">TecnicoId:</label>
                     <div class="input-group">
                         <div style="width: 40%; height: 1em;">
-                            <InputNumber @bind-Value="Tecnico.TecnicoId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                            <InputNumber @bind-Value="tecnico.TecnicoId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
                         </div>
                     </div>
                 </div>
@@ -27,14 +28,26 @@
 
             <div class="mb-3">
                 <label for="Nombres" class="form-label">Nombres:</label>
-                <InputText @bind-Value="Tecnico.Nombres" class="form-control" />
-                <ValidationMessage For="@(() => Tecnico.Nombres)" />
+                <InputText @bind-Value="tecnico.Nombres" class="form-control" />
+                <ValidationMessage For="@(() => tecnico.Nombres)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="TipoTecnicoId" class="form-label">Tipo de Técnico:</label>
+                <InputSelect @bind-Value="tecnico.TipoTecnicosId" class="form-select">
+                    <option value="" disabled>Seleccione un tipo</option>
+                    @foreach (var tipo in L_TipoTecnicos)
+                    {
+                        <option value="@tipo.TipoTecnicosId">@tipo.Descripcion</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => tecnico.TipoTecnicosId)" />
             </div>
 
             <div class="mb-3">
                 <label for="SueldoHora" class="form-label">Sueldo Hora:</label>
-                <InputNumber @bind-Value="Tecnico.SueldoHora" class="form-control" />
-                <ValidationMessage For="@(() => Tecnico.SueldoHora)" />
+                <InputNumber @bind-Value="tecnico.SueldoHora" class="form-control" />
+                <ValidationMessage For="@(() => tecnico.SueldoHora)" />
             </div>
 
         </div>
@@ -53,25 +66,46 @@
     [Parameter]
     public int? tecnicoId { get; set; }
 
-    public Tecnicos Tecnico { get; set; } = new Tecnicos();
+    public int? tipoTecnicosId { get; set; }
+
+    public Tecnicos tecnico { get; set; } = new Tecnicos();
+
+    public TipoTecnicos tipoTecnicos { get; set; } = new TipoTecnicos();
+
+   public List<TipoTecnicos> L_TipoTecnicos { get; set; } = new List<TipoTecnicos>();
+
     private bool Existe = false;
 
+
+ 
+
     protected override async Task OnInitializedAsync()
-    {
+    {        
+        L_TipoTecnicos = await tipoTecnicosServices.ObtenerTipoTecnicos();
+
         if (tecnicoId.HasValue)
-        {
-            Tecnico.TecnicoId = tecnicoId.Value;
-            await Buscar();
+        {           
+            tecnico = await tecnicoService.Buscar(tecnicoId.Value);
+
+            if (tecnico == null)
+            {               
+                notificationService.ShowNotification(titulo: "No encontrado", mensaje: "El técnico no se encontró", NotificationSeverity.Warning);
+                tecnico = new Tecnicos(); 
+            }
+        }
+        else
+        {           
+            notificationService.ShowNotification(titulo: "Error", mensaje: "No se proporcionó el ID del técnico", NotificationSeverity.Warning);
         }
     }
 
     public async Task Buscar()
     {
-        var tecnicoEncontrado = await tecnicoService.Buscar(Tecnico.TecnicoId);
+        var tecnicoEncontrado = await tecnicoService.Buscar(tecnico.TecnicoId);
 
         if (tecnicoEncontrado != null)
         {
-            Tecnico = tecnicoEncontrado;
+            tecnico = tecnicoEncontrado;
         }
         else
         {
@@ -83,13 +117,13 @@
 
     public void Nuevo()
     {
-        Tecnico = new Tecnicos();
+        tecnico = new Tecnicos();
         Existe = false;
     }
 
     public async Task Guardar()
     {
-        var guardo = await tecnicoService.Guardar(this.Tecnico);
+        var guardo = await tecnicoService.Guardar(this.tecnico);
         if (guardo != null)
         {
             notificationService.ShowNotification(titulo: "Guardado", mensaje: "Se a guardado correctamente", NotificationSeverity.Success);
@@ -104,7 +138,7 @@
 
     public async Task Eliminar()
     {
-        var eliminado = await tecnicoService.Eliminar(Tecnico.TecnicoId);
+        var eliminado = await tecnicoService.Eliminar(tecnico.TecnicoId);
         if (eliminado != null)
         {
             notificationService.ShowNotification(titulo: "Eliminado", mensaje: "Se a eliminado correctamente", NotificationSeverity.Success);

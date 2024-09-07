@@ -1,4 +1,5 @@
-﻿using RegistroTecnicos.DAL;
+﻿using Microsoft.EntityFrameworkCore;
+using RegistroTecnicos.DAL;
 using RegistroTecnicos.Models;
 using System.Linq.Expressions;
 
@@ -6,7 +7,6 @@ namespace RegistroTecnicos.Services;
 
 public class TipoTecnicosServices
 {
-
     private readonly Context _context;
 
     public TipoTecnicosServices(Context context)
@@ -16,7 +16,12 @@ public class TipoTecnicosServices
 
     public async Task<bool> Existe(int TipoTecnicoId)
     {
-        return await _context.TipoTecnicos.AnyAsync(t => t.TipoTecnicoId == TipoTecnicoId);
+        return await _context.TipoTecnicos.AnyAsync(t => t.TipoTecnicosId == TipoTecnicoId);
+    }
+
+    public async Task<List<TipoTecnicos>> ObtenerTipoTecnicos()
+    {
+        return await _context.TipoTecnicos.ToListAsync();
     }
 
     public async Task<bool> Insertar(TipoTecnicos tipotecnicos)
@@ -47,11 +52,11 @@ public class TipoTecnicosServices
 
     public async Task<TipoTecnicos?> Buscar(int TipoTecnicoId)
     {
-        return await _context.TipoTecnicos.AsNoTracking().FirstOrDefaultAsync(t => t.TipoTecnicoId == TipoTecnicoId);
+        return await _context.TipoTecnicos.AsNoTracking().FirstOrDefaultAsync(t => t.TipoTecnicosId == TipoTecnicoId);
     }
 
     public async Task<List<TipoTecnicos>> Listar(Expression<Func<TipoTecnicos, bool>> criterio)
     {
-        return await _context.Tecnicos.AsNoTracking().Where(criterio).ToListAsync();
+        return await _context.TipoTecnicos.AsNoTracking().Where(criterio).ToListAsync();
     }
 }

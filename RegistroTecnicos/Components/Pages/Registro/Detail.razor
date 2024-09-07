@@ -4,6 +4,7 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 @inject NotificationService notificationService
+@inject TipoTecnicosServices tipoTecnicosServices
 
 <PageTitle>Detalles de Tecnicos</PageTitle>
 
@@ -22,6 +23,7 @@
                             <ul class="list-unstyled">
                                 <li><strong>tecnicoId:</strong> @Tecnico.TecnicoId</li>
                                 <li><strong>Nombre:</strong> @Tecnico.Nombres</li>
+                                <li><strong>Tipo Tecnico:</strong> @(tipoTecnicos?.Descripcion ?? "No disponible")</li>
                                 <li><strong>SueldoHora:</strong> @Tecnico.SueldoHora</li>
                             </ul>
                         </div>
@@ -46,11 +48,17 @@ else
 
     public Tecnicos Tecnico { get; set; } = new Tecnicos();
 
+    public TipoTecnicos tipoTecnicos { get; set; } = new TipoTecnicos();
+
     protected override async Task OnInitializedAsync()
     {
         if (tecnicoId != 0)
         {
             Tecnico = await tecnicoService.Buscar(tecnicoId);
+            if (Tecnico?.TipoTecnicosId != null)
+            {
+                tipoTecnicos = await tipoTecnicosServices.Buscar(Tecnico.TipoTecnicosId);
+            }
         }
     }
     

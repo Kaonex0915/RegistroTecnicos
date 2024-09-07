@@ -4,6 +4,7 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 @inject NotificationService notificationService
+@inject TipoTecnicosServices tipoTecnicosServices
 
 <EditForm Model="Tecnico" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
@@ -32,6 +33,19 @@
                 <ValidationMessage For="@(() => Tecnico.Nombres)" />
             </div>
 
+            @* TipoTecnico *@
+            <div class="mb-3">
+                <label for="TipoTecnicoId" class="form-label">Tipo de Técnico:</label>
+                <InputSelect @bind-Value="Tecnico.TipoTecnicosId" class="form-select">
+                    <option value="" disabled>Seleccione un tipo</option>
+                    @foreach (var tipo in L_TipoTecnicos)
+                    {
+                        <option value="@tipo.TipoTecnicosId">@tipo.Descripcion</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Tecnico.TipoTecnicosId)" />
+            </div>
+
             @* SueldoHora *@
             <div class="mb-3">
                 <label for="SueldoHora" class="form-label">SueldoHora:</label>
@@ -57,15 +71,22 @@
 @code {
     [Parameter]
     public int? tecnicoId { get; set; }
+    public int? tipoTecnicosId { get; set; }
 
     public Tecnicos Tecnico { get; set; } = new Tecnicos();
     private bool Existe = false;
 
+    public TipoTecnicos TipoTecnicos { get; set; } = new TipoTecnicos();
+
+    public List<TipoTecnicos> L_TipoTecnicos { get; set; } = new List<TipoTecnicos>();
+
     protected override async Task OnInitializedAsync()
     {
-        if (tecnicoId.HasValue)
+        L_TipoTecnicos = await tipoTecnicosServices.ObtenerTipoTecnicos();
+
+        if (tipoTecnicosId.HasValue) 
         {
-            Tecnico.TecnicoId = tecnicoId.Value;
+            TipoTecnicos.TipoTecnicosId = tipoTecnicosId.Value;
             await Buscar();
         }
     }
@@ -107,6 +128,7 @@
 
     }
 
+
     public async Task Eliminar()
     {
         var eliminado = await tecnicoService.Eliminar(Tecnico.TecnicoId);
@@ -120,6 +142,4 @@
         }
         Nuevo();
     }
-
-
 }
