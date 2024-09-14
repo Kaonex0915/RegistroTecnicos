@@ -12,7 +12,7 @@ namespace RegistroTecnicos.Models
 
         [Required(ErrorMessage = "El campo Whatsapp es necesario")]
         [Range(10, 12)]
-        public string Whatsapp { get; set; }
+        public int Whatsapp { get; set; }
 
     }
 }

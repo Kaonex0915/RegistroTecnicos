@@ -1,0 +1,119 @@
+﻿@page "/Clientes/Index"
+@rendermode InteractiveServer
+@inject ClientesServices clientesServices
+
+<EditForm Model="ListaClientes" class="border shadow-lg p-3 rounded">    
+    
+    <div class="card-header bg-primary text-white text-center py-2 rounded">
+        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta Clientes</h3>
+    </div>
+    <div class="card-body">        
+
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label">Filtrar por:</label>
+                <select @bind="filtro" class="form-select">
+                    <option value="id">ID</option>
+                    <option value="Nombres">Nombres</option>
+                    <option value="WhatsApp">WhatsApp</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="ValorFiltro" class="form-label">Busqueda:</label>
+                <div class="input-group">
+                    <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                        <span class="bi bi-search"></span> Buscar
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3 text-end">
+                <a href="/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered text-center">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>clienteId</th>
+                <th>Nombres</th>
+                <th>WhatsApp</th>
+                <th>Ver</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tecnico in ListaClientes)
+            {
+                <tr>
+                    <td>@Cliente.ClienteId</td>
+                    <td>@Cliente.Nombres</td>
+                    <td>@Cliente.Whatsapp</td>
+                    <td>
+                        <a class="btn btn-outline-primary" href="/Details/@Cliente.ClienteId">
+                            <span class="bi bi-info-circle-fill"></span>
+                        </a>
+                    </td>
+
+                    <td>
+                        <a class="btn btn-outline-success" href="/Edit/@Cliente.ClienteId">
+                            <span class="bi bi-marker-tip"></span>
+                        </a>
+                    </td>
+
+                    <td>
+                        <a class="btn btn-outline-warning" href="/Delete/@Cliente.ClienteId">
+                            <span class="bi bi-dash-circle-fill"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</EditForm>
+
+
+@code {
+
+    public Clientes Cliente = new Clientes();
+
+    public List<Clientes> ListaClientes = new List<Clientes>();
+
+    private string filtro = "Id";
+    private string valorFiltro = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaClientes = await clientesServices.Listar(c => true);
+    }
+
+    public async Task Guardar()
+    {
+        var guardo = await clientesServices.Guardar(Cliente);
+    }
+
+    private async Task Buscar()
+    {
+        if (valorFiltro.Trim() != "")
+        {
+            if (filtro == "id" && int.TryParse(valorFiltro, out int clienteId))
+            {
+                 ListaClientes = await clientesServices.Listar(c => c.ClienteId == clienteId);
+            }
+            else if (filtro == "Nombres")
+            {
+                ListaClientes = await clientesServices.Listar(c => c.Nombres == valorFiltro);
+            }
+            else if (filtro == "WhatsApp" && int.TryParse(valorFiltro, out int WhatsApp))
+            {
+                ListaClientes = await clientesServices.Listar(c => c.Whatsapp == WhatsApp);
+            }
+        }
+        else
+        {
+            ListaClientes = await clientesServices.Listar(t => true);
+        }
+    }
+
+}
