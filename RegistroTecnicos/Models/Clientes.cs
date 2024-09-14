@@ -6,7 +6,7 @@ namespace RegistroTecnicos.Models
     public class Clientes
     {
         [Key]
-        public int ClientesId { get; set; }     
+        public int ClienteId { get; set; }     
         [Required(ErrorMessage = "El nombre del cliente es necesario")]
         public string Nombres { get; set; }
 

@@ -7,9 +7,9 @@ namespace RegistroTecnicos.Models
     public class Trabajos
     {
         [Key]
-        public int TrabajosId { get; set; }
+        public int TrabajoId { get; set; }
         [ForeignKey("ClientesId")]
-        public int ClientesId { get; set; }
+        public int ClienteId { get; set; }
 
         [ForeignKey("TecnicoId")]
         public int TecnicoId { get; set;}
