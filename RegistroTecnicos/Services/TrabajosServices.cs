@@ -54,4 +54,6 @@ public class TrabajosServices
     {
         return await _context.Trabajos.AsNoTracking().Where(criterio).ToListAsync();
     }
+
+
 }

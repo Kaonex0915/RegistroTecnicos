@@ -2,6 +2,7 @@
 @page "/Trabajos/Detail/{trabajoId:int}"
 @inject TrabajosServices trabajosServices
 @inject NavigationManager navigationManager
+@inject ClientesServices clientesServices
 @rendermode InteractiveServer
 @inject NotificationService notificationService
 
@@ -17,12 +18,14 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6">
-
                         <div class="card-body">
                             <ul class="list-unstyled">
                                 <li><strong>trabajoId:</strong> @Trabajo.TrabajoId</li>
-                                <li><strong>Descripcion:</strong> @Trabajo.Descripcion</li>
                                 <li><strong>Fecha:</strong> @Trabajo.Fecha</li>
+                                <li><strong>Descripcion:</strong> @Trabajo.Descripcion</li>
+                                <li><strong>ClienteId:</strong> @Trabajo.ClienteId</li>
+                                <li><strong>TecnicoId:</strong> @Trabajo.TecnicoId</li>
+
                             </ul>
                         </div>
 
@@ -31,6 +34,9 @@
             </div>
             <div class="card-footer">
                 <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+                <a href=@($"https://wa.me/{Cliente?.Whatsapp}?text=Saludos,%20el%20trabajo%20está%20listo%20{Cliente?.Nombres}.") class="btn btn-success">
+                    <span class="bi bi-whatsapp"></span> Enviar mensaje
+                </a>
             </div>
         </div>
     </div>
@@ -46,17 +52,20 @@ else
 
     public Trabajos Trabajo { get; set; } = new Trabajos();
 
+    public Clientes Cliente { get; set; } = new Clientes();
+
     protected override async Task OnInitializedAsync()
     {
         if (trabajoId != 0)
         {
             Trabajo = await trabajosServices.Buscar(trabajoId);
+            Cliente = await clientesServices.Buscar(Trabajo.ClienteId);
         }
     }
 
     public void Volver()
     {
-        navigationManager.NavigateTo("/index");
+        navigationManager.NavigateTo("/Trabajos/Index");
     }
 
 }

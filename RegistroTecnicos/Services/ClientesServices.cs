@@ -54,4 +54,9 @@ public class ClientesServices
     {
         return await _context.Clientes.AsNoTracking().Where(criterio).ToListAsync();
     }
+    public async Task<List<Clientes>> GetClientes()
+    {
+        return await _context.Clientes.ToListAsync();
+    }
+
 }

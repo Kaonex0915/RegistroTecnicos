@@ -27,8 +27,9 @@ namespace RegistroTecnicos.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Whatsapp")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Whatsapp")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ClienteId");
 

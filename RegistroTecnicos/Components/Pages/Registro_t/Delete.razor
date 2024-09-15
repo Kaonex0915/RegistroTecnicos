@@ -32,9 +32,11 @@
                                             <div class="col-md-8">
                                                 <ul class="list-unstyled">
                                                     <li><strong>trabajoId:</strong> @Trabajo.TrabajoId</li>
-                                                    <li><strong>Descripcion:</strong> @Trabajo.Descripcion</li>
                                                     <li><strong>Fecha:</strong> @Trabajo.Fecha</li>
+                                                    <li><strong>Descripcion:</strong> @Trabajo.Descripcion</li>                                                    
                                                     <li><strong>Monto:</strong> @Trabajo.Monto</li>
+                                                    <li><strong>ClienteId:</strong> @Trabajo.ClienteId</li>
+                                                    <li><strong>TecnicoId:</strong> @Trabajo.TecnicoId</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -89,7 +91,7 @@ else
 
     public void Volver()
     {
-        navigationManager.NavigateTo("/index");
+        navigationManager.NavigateTo("/Trabajos/Index");
     }
 
 }

@@ -47,23 +47,23 @@
             @foreach (var cliente in ListaClientes)
             {
                 <tr>
-                    <td>@Cliente.ClienteId</td>
-                    <td>@Cliente.Nombres</td>
-                    <td>@Cliente.Whatsapp</td>
+                    <td>@cliente.ClienteId</td>
+                    <td>@cliente.Nombres</td>
+                    <td>@cliente.Whatsapp</td>
                     <td>
-                        <a class="btn btn-outline-primary" href="/Details/@Cliente.ClienteId">
+                        <a class="btn btn-outline-primary" href="/Clientes/Detail/@cliente.ClienteId">
                             <span class="bi bi-info-circle-fill"></span>
                         </a>
                     </td>
 
                     <td>
-                        <a class="btn btn-outline-success" href="/Edit/@Cliente.ClienteId">
+                        <a class="btn btn-outline-success" href="/Clientes/Edit/@cliente.ClienteId">
                             <span class="bi bi-marker-tip"></span>
                         </a>
                     </td>
 
                     <td>
-                        <a class="btn btn-outline-warning" href="/Delete/@Cliente.ClienteId">
+                        <a class="btn btn-outline-warning" href="/Clientes/Delete/@cliente.ClienteId">
                             <span class="bi bi-dash-circle-fill"></span>
                         </a>
                     </td>

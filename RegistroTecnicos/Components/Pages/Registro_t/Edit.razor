@@ -1,17 +1,14 @@
-﻿@page "/Trabajos/Create"
-@page "/Trabajos/Create/{trabajoId:int}"
-@inject TrabajosServices trabajosServices
-@inject NavigationManager navigationManager
-@inject TecnicoServices tecnicoServices
+﻿@page "/Trabajos/Edit/{TrabajoId:int}"
 @inject ClientesServices clientesServices
+@inject TecnicoServices tecnicosServices
+@inject TrabajosServices trabajosServices
 @rendermode InteractiveServer
-@inject NotificationService notificationService
 
 <EditForm Model="Trabajo" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
         <div class="card-header bg-primary text-white" style="text-align: center;">
-            <h3> <i class="fas fa-clipboard-list"></i> Registro de Trabajos</h3>
+            <h3> <i class="fas fa-clipboard-list"></i> Editar trabajo</h3>
         </div>
 
         <div class="card-body">
@@ -20,43 +17,11 @@
                 <div class="col-md-6 mb-3">
                     <label for="TrabajoId" class="form-label">TrabajoId:</label>
                     <div class="input-group">
-                        <div class="sizeid">
+                        <div class=" sizeid">
                             <InputNumber @bind-Value="Trabajo.TrabajoId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
                         </div>
                     </div>
                 </div>
-            </div>
-
-            @* ClienteId *@
-            <div class="mb-3">
-            <label for="ClienteId" class="form-label">Cliente:</label>
-            <InputSelect @bind-Value="Trabajo.ClienteId" class="form-control">
-            <option value="">Seleccione un cliente</option>
-            @foreach (var cliente in Cliente)
-            {
-            <option value="@cliente.ClienteId">@cliente.Nombres</option>
-            }
-            </InputSelect>
-            <ValidationMessage For="@(() => Trabajo.ClienteId)" />
-            </div>
-
-            @* TecnicoId *@
-            <div class="mb-3">
-                <label for="TecnicoId" class="form-label">Técnico:</label>
-                <InputSelect @bind-Value="Trabajo.TecnicoId" class="form-control">
-                    <option value="">Seleccione un técnico</option>
-                    @foreach (var tecnico in Tecnico)
-                    {
-                        <option value="@tecnico.TecnicoId">@tecnico.Nombres</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => Trabajo.TecnicoId)" />
-            </div>
-            @* Descripcion *@
-            <div class="mb-3">
-                <label for="Descripcion" class="form-label">Descripcion:</label>
-                <InputText @bind-Value="Trabajo.Descripcion" class="form-control" />
-                <ValidationMessage For="@(() => Trabajo.Descripcion)" />
             </div>
 
             @* Fecha *@
@@ -64,6 +29,39 @@
                 <label for="Fecha" class="form-label">Fecha:</label>
                 <InputDate @bind-Value="Trabajo.Fecha" class="form-control" />
                 <ValidationMessage For="@(() => Trabajo.Fecha)" />
+            </div>
+
+            @* ClienteId *@
+            <div class="mb-3">
+                <label for="ClienteId" class="form-label">Cliente:</label>
+                <InputSelect @bind-Value="Trabajo.ClienteId" class="form-control">
+                    <option value="">Seleccione un cliente</option>
+                    @foreach (var cliente in Lista_Clientes)
+                    {
+                        <option value="@cliente.ClienteId">@cliente.Nombres</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Trabajo.ClienteId)" />
+            </div>
+
+            @* TecnicoId *@
+            <div class="mb-3">
+                <label for="TecnicoId" class="form-label">Técnico:</label>
+                <InputSelect @bind-Value="Trabajo.TecnicoId" class="form-control">
+                    <option value="">Seleccione un técnico</option>
+                    @foreach (var tecnico in Lista_Tecnicos)
+                    {
+                        <option value="@tecnico.TecnicoId">@tecnico.Nombres</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Trabajo.TecnicoId)" />
+            </div>
+
+            @* Descripcion *@
+            <div class="mb-3">
+                <label for="Descripcion" class="form-label">Descripcion:</label>
+                <InputText @bind-Value="Trabajo.Descripcion" class="form-control" />
+                <ValidationMessage For="@(() => Trabajo.Descripcion)" />
             </div>
 
             @* Monto *@
@@ -79,52 +77,48 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
                 <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>
-                <a type="button" href="/Trabajos/Index" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
+                <a type="button" href="/Tecnico/Index/" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
             </div>
         </div>
     </div>
 </EditForm>
 
-
-
-
 @code {
     [Parameter]
-    public int? trabajoId { get; set; }
-
+    public int? TrabajoId { get; set; }
     public Trabajos Trabajo { get; set; } = new Trabajos();
-    public List<Clientes> Cliente { get; set; } = new List<Clientes>();
-    public List<Tecnicos> Tecnico { get; set; } = new List<Tecnicos>();
-
     private bool Existe = false;
+    public List<Clientes> Lista_Clientes { get; set; } = new List<Clientes>();
+    public List<Tecnicos> Lista_Tecnicos { get; set; } = new List<Tecnicos>();
 
     protected override async Task OnInitializedAsync()
     {
-        
-        Cliente = await clientesServices.GetClientes();
-        Tecnico = await tecnicoServices.GetTecnicos();
 
-        if (trabajoId != null)
+        Lista_Clientes = await clientesServices.GetClientes();
+        Lista_Tecnicos = await tecnicosServices.GetTecnicos();
+
+
+        if (TrabajoId.HasValue)
         {
+            Trabajo.TrabajoId = TrabajoId.Value;
             await Buscar();
         }
     }
 
     public async Task Buscar()
     {
-        var trabajoEncontrado = await trabajosServices.Buscar(Trabajo.TrabajoId);
+        Existe = false;
+        var TrabajoE = await trabajosServices.Buscar(Trabajo.TrabajoId);
 
-        if (trabajoEncontrado != null)
+        if (TrabajoE != null)
         {
-            Trabajo = trabajoEncontrado;
+            Trabajo = TrabajoE;
         }
         else
         {
-            notificationService.ShowNotification(titulo: "Encontrado", mensaje: "La entrada se ha encontrado con exito", NotificationSeverity.Info);
+            Nuevo();
         }
-
     }
-
 
     public void Nuevo()
     {
@@ -134,32 +128,16 @@
 
     public async Task Guardar()
     {
-        var guardo = await trabajosServices.Guardar(this.Trabajo);
-        if (guardo != null)
+        var guardo = await trabajosServices.Guardar(Trabajo);
+        if (guardo)
         {
-            notificationService.ShowNotification(titulo: "Guardado", mensaje: "Se a guardado correctamente", NotificationSeverity.Success);
+            Nuevo();
         }
-        else
-        {
-            notificationService.ShowNotification(titulo: "Error", mensaje: "Ocurrio un error al guardar", NotificationSeverity.Warning);
-        }
-        Nuevo();
-
     }
 
     public async Task Eliminar()
     {
         var eliminado = await trabajosServices.Eliminar(Trabajo.TrabajoId);
-        if (eliminado != null)
-        {
-            notificationService.ShowNotification(titulo: "Eliminado", mensaje: "Se a eliminado correctamente", NotificationSeverity.Success);
-        }
-        else
-        {
-            notificationService.ShowNotification(titulo: "Error", mensaje: "Ocurrio un error al eliminar", NotificationSeverity.Warning);
-        }
         Nuevo();
     }
-
-
 }
