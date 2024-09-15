@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="col-md-3 text-end">
-                <a href="/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
+                <a href="/Clientes/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var tecnico in ListaClientes)
+            @foreach (var cliente in ListaClientes)
             {
                 <tr>
                     <td>@Cliente.ClienteId</td>
@@ -80,6 +80,8 @@
 
     public List<Clientes> ListaClientes = new List<Clientes>();
 
+    public string WhatsApp = "";
+
     private string filtro = "Id";
     private string valorFiltro = "";
 
@@ -105,7 +107,7 @@
             {
                 ListaClientes = await clientesServices.Listar(c => c.Nombres == valorFiltro);
             }
-            else if (filtro == "WhatsApp" && int.TryParse(valorFiltro, out int WhatsApp))
+            else if (filtro == "WhatsApp" && valorFiltro ==  WhatsApp)
             {
                 ListaClientes = await clientesServices.Listar(c => c.Whatsapp == WhatsApp);
             }

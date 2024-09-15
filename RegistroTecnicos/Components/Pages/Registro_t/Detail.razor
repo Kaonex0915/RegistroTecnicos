@@ -1,0 +1,62 @@
+﻿@page "/Trabajos/Detail"
+@page "/Trabajos/Detail/{trabajoId:int}"
+@inject TrabajosServices trabajosServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+@inject NotificationService notificationService
+
+<PageTitle>Detalles de Trabajo</PageTitle>
+
+@if (Trabajo != null)
+{
+    <div class="container">
+        <div class="card shadow-header">
+            <div class="card-header  bg-primary text-white text-center py-2 rounded">
+                <h3 class="text-center"><strong>Detalles del trabajo</strong></h3>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>trabajoId:</strong> @Trabajo.TrabajoId</li>
+                                <li><strong>Descripcion:</strong> @Trabajo.Descripcion</li>
+                                <li><strong>Fecha:</strong> @Trabajo.Fecha</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>Trabajo no encontrado.</p>
+}
+
+@code {
+    [Parameter]
+    public int trabajoId { get; set; }
+
+    public Trabajos Trabajo { get; set; } = new Trabajos();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (trabajoId != 0)
+        {
+            Trabajo = await trabajosServices.Buscar(trabajoId);
+        }
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/index");
+    }
+
+}

@@ -1,29 +1,29 @@
-﻿@page "/Clientes/Delete"
-@page "/Clientes/Delete/{clienteId:int}"
-@inject ClientesServices clientesServices
+﻿@page "/Trabajos/Delete"
+@page "/Trabajos/Delete/{trabajoId:int}"
+@inject TrabajosServices trabajosServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 @inject NotificationService notificationService
 
-<PageTitle>Eliminar Cliente</PageTitle>
+<PageTitle>Eliminar Trabajo</PageTitle>
 
-@if (Cliente != null)
+@if (Trabajo != null)
 {
     <div class="container">
-        <div class="card shadow-header">     
+        <div class="card shadow-header">
             <div class="card-header  bg-primary text-white text-center py-2 rounded">
-                <h3><strong>Eliminar Cliente</strong></h3>
+                <h3><strong>Eliminar Trabajo</strong></h3>
             </div>
             <div class="card-header">
-                <h3 class="text-danger">¿Estás seguro de que quieres eliminar ese cliente?</h3>
-            </div>    
-            
+                <h3 class="text-danger">¿Estás seguro de que quieres eliminar ese trabajo?</h3>
+            </div>
+
             <div class="container">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card shadow-lg">
                             <div class="card-header">
-                                <h3 class="text-center"><strong>Datos del cliente</strong></h3>
+                                <h3 class="text-center"><strong>Datos del trabajo</strong></h3>
                             </div>
                             <div class="card-body">
                                 <div class="border-primary border-2 borde">
@@ -31,9 +31,10 @@
                                         <div class="row">
                                             <div class="col-md-8">
                                                 <ul class="list-unstyled">
-                                                    <li><strong>clienteId:</strong> @Cliente.ClienteId</li>
-                                                    <li><strong>Nombres:</strong> @Cliente.Nombres</li>
-                                                    <li><strong>WhatsApp:</strong> @Cliente.Whatsapp</li>
+                                                    <li><strong>trabajoId:</strong> @Trabajo.TrabajoId</li>
+                                                    <li><strong>Descripcion:</strong> @Trabajo.Descripcion</li>
+                                                    <li><strong>Fecha:</strong> @Trabajo.Fecha</li>
+                                                    <li><strong>Monto:</strong> @Trabajo.Monto</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -43,7 +44,7 @@
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
 
             <div class="card-footer">
                 <button type="button" class="btn btn-outline-danger" @onclick="Eliminar"><i class="bi bi-trash-fill"></i> Eliminar</button>
@@ -54,33 +55,33 @@
 }
 else
 {
-    <p>Cliente no encontrado.</p>
+    <p>Trabajo no encontrado.</p>
 }
 
 
 
 @code {
     [Parameter]
-    public int clienteId { get; set; }
+    public int trabajoId { get; set; }
 
-    public Clientes Cliente { get; set; } = new Clientes();
+    public Trabajos Trabajo { get; set; } = new Trabajos();
 
     protected override async Task OnInitializedAsync()
     {
-        if (clienteId !=0)
+        if (trabajoId != 0)
         {
-            Cliente = await clientesServices.Buscar(clienteId);
+            Trabajo = await trabajosServices.Buscar(trabajoId);
         }
     }
 
     public async Task Eliminar()
     {
-        if(clienteId == 0 || Cliente == null)
+        if (trabajoId == 0 || Trabajo == null)
         {
             return;
         }
 
-        if (await clientesServices.Eliminar(clienteId))
+        if (await trabajosServices.Eliminar(trabajoId))
         {
             Volver();
         }
@@ -88,7 +89,7 @@ else
 
     public void Volver()
     {
-        navigationManager.NavigateTo("/Clientes/Index");
+        navigationManager.NavigateTo("/index");
     }
 
 }
