@@ -10,7 +10,7 @@ namespace RegistroTecnicos.Models
         public int PrioridadId { get; set; }
         [Required(ErrorMessage = "La descripcion es requerida")]
         public string Descripcion { get; set; }
-        [Required(ErrorMessage ="La fecha es requerida")]
-        public int Fecha {  get; set; }  
+        [Required(ErrorMessage = "El tiempo es requerido")]
+        public DateTime Tiempo { get; set; } = DateTime.Now; 
     }
 }
