@@ -11,6 +11,11 @@ a, .btn-link {
     background-color: #1b6ec2;
     border-color: #1861ac;
 }
+.btn-rojo {
+    color: #d40808;
+    background-color: #b5616;
+    border-color: #d40808;
+}
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;

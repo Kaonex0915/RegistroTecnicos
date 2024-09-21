@@ -21,7 +21,7 @@
 
                         <div class="card-body">
                             <ul class="list-unstyled">
-                                <li><strong>tecnicoId:</strong> @Tecnico.TecnicoId</li>
+                                <li><strong>ID de tecnico:</strong> @Tecnico.TecnicoId</li>
                                 <li><strong>Nombre:</strong> @Tecnico.Nombres</li>
                                 <li><strong>Tipo Tecnico:</strong> @(tipoTecnicos?.Descripcion ?? "No disponible")</li>
                                 <li><strong>SueldoHora:</strong> @Tecnico.SueldoHora</li>
@@ -64,7 +64,7 @@ else
     
     public void Volver()
     {
-        navigationManager.NavigateTo("/index");
+        navigationManager.NavigateTo("/Index");
     }
 
 }

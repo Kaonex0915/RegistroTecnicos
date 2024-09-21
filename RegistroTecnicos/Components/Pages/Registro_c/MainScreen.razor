@@ -35,7 +35,7 @@
     <table class="table table-bordered text-center">
         <thead class="bg-primary text-white">
             <tr>
-                <th>clienteId</th>
+                <th>ID de cliente</th>
                 <th>Nombres</th>
                 <th>WhatsApp</th>
                 <th>Ver</th>
@@ -52,19 +52,19 @@
                     <td>@cliente.Whatsapp</td>
                     <td>
                         <a class="btn btn-outline-primary" href="/Clientes/Detail/@cliente.ClienteId">
-                            <span class="bi bi-info-circle-fill"></span>
+                            <span class="bi bi-card-heading fs-5"></span>
                         </a>
                     </td>
 
                     <td>
                         <a class="btn btn-outline-success" href="/Clientes/Edit/@cliente.ClienteId">
-                            <span class="bi bi-marker-tip"></span>
+                            <span class="bi bi-pencil fs-5"></span>
                         </a>
                     </td>
 
                     <td>
-                        <a class="btn btn-outline-warning" href="/Clientes/Delete/@cliente.ClienteId">
-                            <span class="bi bi-dash-circle-fill"></span>
+                        <a class="btn btn-rojo" href="/Clientes/Delete/@cliente.ClienteId">
+                            <span class="bi bi-trash fs-5"></span>
                         </a>
                     </td>
                 </tr>

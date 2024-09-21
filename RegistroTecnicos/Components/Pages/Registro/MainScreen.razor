@@ -37,11 +37,11 @@
     <table class="table table-bordered text-center">
         <thead class="bg-primary text-white">
             <tr>
-                <th>tecnicoId</th>
+                <th>ID de Tecnico</th>
                 <th>Nombres</th>
-                <th>TipoTecnico</th>
-                <th>SueldoHora</th>
-                <th>Ver</th>
+                <th>Tipo de Tecnico</th>
+                <th>Sueldo/Hora</th>
+                <th>Detalle</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
             </tr>
@@ -57,19 +57,19 @@
                     <td>@tecnico.SueldoHora</td>
                     <td>
                         <a class="btn btn-outline-primary" href="/Detail/@tecnico.TecnicoId">
-                            <span class="bi bi-info-circle-fill"></span>
+                            <span class="bi bi-card-heading fs-5"></span>
                         </a>
                     </td>
 
                     <td>
                         <a class="btn btn-outline-success" href="/Edit/@tecnico.TecnicoId">
-                            <span class="bi bi-marker-tip"></span>
+                            <span class="bi bi-pencil fs-5"></span>
                         </a>
                     </td>
 
                     <td>
-                        <a class="btn btn-outline-warning" href="/Delete/@tecnico.TecnicoId">
-                            <span class="bi bi-dash-circle-fill"></span>
+                        <a class="btn btn-rojo" href="/Delete/@tecnico.TecnicoId">
+                            <span class="bi bi-trash fs-5"></span>
                         </a>
                     </td>
                 </tr>

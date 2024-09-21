@@ -20,11 +20,12 @@
                     <div class="col-md-6">
                         <div class="card-body">
                             <ul class="list-unstyled">
-                                <li><strong>trabajoId:</strong> @Trabajo.TrabajoId</li>
-                                <li><strong>Fecha:</strong> @Trabajo.Fecha</li>
+                                <li><strong>ID de trabajo:</strong> @Trabajo.TrabajoId</li>
+                                <li><strong>Fecha:</strong> @Trabajo.Fecha.ToString("dd/MM/yyyy")</li>
                                 <li><strong>Descripcion:</strong> @Trabajo.Descripcion</li>
-                                <li><strong>ClienteId:</strong> @Trabajo.ClienteId</li>
-                                <li><strong>TecnicoId:</strong> @Trabajo.TecnicoId</li>
+                                <li><strong>ID de cliente:</strong> @Trabajo.ClienteId</li>
+                                <li><strong>ID de tecnico:</strong> @Trabajo.TecnicoId</li>
+                                <li><strong>ID de prioridad</strong>@Trabajo.PrioridadId </li>
 
                             </ul>
                         </div>

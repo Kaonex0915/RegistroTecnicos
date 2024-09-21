@@ -11,6 +11,6 @@ namespace RegistroTecnicos.Models
         [Required(ErrorMessage = "La descripcion es requerida")]
         public string Descripcion { get; set; }
         [Required(ErrorMessage = "El tiempo es requerido")]
-        public DateTime Tiempo { get; set; } = DateTime.Now; 
+        public int Tiempo { get; set; }
     }
 }

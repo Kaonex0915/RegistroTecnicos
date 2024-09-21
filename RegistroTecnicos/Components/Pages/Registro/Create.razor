@@ -17,7 +17,7 @@
             @* TecnicoId *@
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="TecnicoId" class="form-label">TecnicoId:</label>
+                    <label for="TecnicoId" class="form-label">ID de Técnico:</label>
                     <div class="input-group">
                         <div class ="sizeid">
                             <InputNumber @bind-Value="Tecnico.TecnicoId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
@@ -48,7 +48,7 @@
 
             @* SueldoHora *@
             <div class="mb-3">
-                <label for="SueldoHora" class="form-label">SueldoHora:</label>
+                <label for="SueldoHora" class="form-label">Sueldo/Hora:</label>
                 <InputNumber @bind-Value="Tecnico.SueldoHora" class="form-control" />
                 <ValidationMessage For="@(() => Tecnico.SueldoHora)" />
             </div>

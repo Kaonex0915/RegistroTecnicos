@@ -54,4 +54,8 @@ public class PrioridadesServices
     {
         return await _context.Prioridades.AsNoTracking().Where(criterio).ToListAsync();
     }
+    public async Task<List<Prioridades>> GetPrioridades()
+    {
+        return await _context.Prioridades.ToListAsync();
+    }
 }

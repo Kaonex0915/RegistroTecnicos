@@ -4,6 +4,7 @@
 @inject NavigationManager navigationManager
 @inject TecnicoServices tecnicoServices
 @inject ClientesServices clientesServices
+@inject PrioridadesServices prioridadesServices
 @rendermode InteractiveServer
 @inject NotificationService notificationService
 
@@ -52,6 +53,19 @@
                 </InputSelect>
                 <ValidationMessage For="@(() => Trabajo.TecnicoId)" />
             </div>
+            @* Prioridad *@
+            <div class="mb-3">
+                <label for="PrioridadId" class="form-label">Prioridad:</label>
+                <InputSelect @bind-Value="Trabajo.PrioridadId" class="form-select">
+                    <option value="" disabled>Seleccione un tipo</option>
+                    @foreach (var tipo in L_Prioridad)
+                    {
+                        <option value="@tipo.PrioridadId">@tipo.Descripcion</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Trabajo.PrioridadId)" />
+            </div>
+
             @* Descripcion *@
             <div class="mb-3">
                 <label for="Descripcion" class="form-label">Descripcion:</label>
@@ -95,12 +109,13 @@
     public Trabajos Trabajo { get; set; } = new Trabajos();
     public List<Clientes> Cliente { get; set; } = new List<Clientes>();
     public List<Tecnicos> Tecnico { get; set; } = new List<Tecnicos>();
+    public List<Prioridades> L_Prioridad { get; set; } = new List<Prioridades>();
 
     private bool Existe = false;
 
     protected override async Task OnInitializedAsync()
     {
-        
+        L_Prioridad = await prioridadesServices.GetPrioridades();         
         Cliente = await clientesServices.GetClientes();
         Tecnico = await tecnicoServices.GetTecnicos();
 
