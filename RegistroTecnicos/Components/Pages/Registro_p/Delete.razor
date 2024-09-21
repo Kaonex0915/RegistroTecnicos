@@ -1,0 +1,94 @@
+﻿@page "/Prioridades/Delete"
+@page "/Prioridades/Delete/{prioridadId:int}"
+@inject PrioridadesServices prioridadesServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+@inject NotificationService notificationService
+
+<PageTitle>Eliminar Prioridad</PageTitle>
+
+@if (Prioridad != null)
+{
+    <div class="container">
+        <div class="card shadow-header">
+            <div class="card-header  bg-primary text-white text-center py-2 rounded">
+                <h3><strong>Eliminar Prioridad</strong></h3>
+            </div>
+            <div class="card-header">
+                <h3 class="text-danger">¿Estás seguro de que quieres eliminar esta prioridad?</h3>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card shadow-lg">
+                            <div class="card-header">
+                                <h3 class="text-center"><strong>Datos de la prioridad</strong></h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="border-primary border-2 borde">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <ul class="list-unstyled">
+                                                    <li><strong>prioridadId:</strong> @Prioridad.PrioridadId</li>
+                                                    <li><strong>Descripcion:</strong> @Prioridad.Descripcion</li>
+                                                    <li><strong>Tiempo:</strong> @Prioridad.Tiempo</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button type="button" class="btn btn-outline-danger" @onclick="Eliminar"><i class="bi bi-trash-fill"></i> Eliminar</button>
+                <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>Prioridad no encontrada.</p>
+}
+
+
+
+@code {
+    [Parameter]
+    public int prioridadId { get; set; }
+
+    public Prioridades Prioridad { get; set; } = new Prioridades();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (prioridadId != 0)
+        {
+            Prioridad = await prioridadesServices.Buscar(prioridadId);
+        }
+    }
+
+    public async Task Eliminar()
+    {
+        if (prioridadId == 0 || Prioridad == null)
+        {
+            return;
+        }
+
+        if (await prioridadesServices.Eliminar(prioridadId))
+        {
+            Volver();
+        }
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Prioridades/Index");
+    }
+
+}
