@@ -14,6 +14,9 @@ namespace RegistroTecnicos.Models
         [ForeignKey("TecnicoId")]
         public int TecnicoId { get; set;}
 
+        [ForeignKey("PrioridadId")]
+        public int PrioridadId { get; set; }
+
         [Required(ErrorMessage = "La fecha del trabajo es requerida")]
         public DateTime Fecha {  get; set; } = DateTime.Now;
 
