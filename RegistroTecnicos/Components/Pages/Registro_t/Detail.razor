@@ -24,6 +24,10 @@
                                 <li><strong>Fecha:</strong> @Trabajo.Fecha.ToString("dd/MM/yyyy")</li>
                                 <li><strong>Descripcion:</strong> @Trabajo.Descripcion</li>
                                 <li><strong>ID de cliente:</strong> @Trabajo.ClienteId</li>
+                                @foreach (var detalle in Lista_TrabajosDetalle)
+                                {
+                                    <li><strong>Articulo: </strong>@detalle.Articulos.Descripcion</li>
+                                }
                                 <li><strong>ID de tecnico:</strong> @Trabajo.TecnicoId</li>
                                 <li><strong>ID de prioridad</strong>@Trabajo.PrioridadId </li>
 
@@ -50,7 +54,7 @@ else
 @code {
     [Parameter]
     public int trabajoId { get; set; }
-
+    public List<TrabajosDetalle> Lista_TrabajosDetalle { get; set; } = new List<TrabajosDetalle>();
     public Trabajos Trabajo { get; set; } = new Trabajos();
 
     public Clientes Cliente { get; set; } = new Clientes();
@@ -61,6 +65,7 @@ else
         {
             Trabajo = await trabajosServices.Buscar(trabajoId);
             Cliente = await clientesServices.Buscar(Trabajo.ClienteId);
+            Lista_TrabajosDetalle = await trabajosServices.BuscarTrabajoDetalle(trabajoId);
         }
     }
 

@@ -35,6 +35,10 @@
                                                     <li><strong>Fecha:</strong> @Trabajo.Fecha</li>
                                                     <li><strong>Descripcion:</strong> @Trabajo.Descripcion</li>                                                    
                                                     <li><strong>Monto:</strong> @Trabajo.Monto</li>
+                                                    @foreach (var detalle in Lista_TrabajosDetalle)
+                                                    {
+                                                        <li><strong>Articulo: </strong>@detalle.Articulos.Descripcion</li>
+                                                    }
                                                     <li><strong>Id de cliente:</strong> @Trabajo.ClienteId</li>
                                                     <li><strong>Id de tecnico:</strong> @Trabajo.TecnicoId</li>
                                                 </ul>
@@ -65,6 +69,7 @@ else
 @code {
     [Parameter]
     public int trabajoId { get; set; }
+    public List<TrabajosDetalle> Lista_TrabajosDetalle { get; set; } = new List<TrabajosDetalle>();
 
     public Trabajos Trabajo { get; set; } = new Trabajos();
 
@@ -73,6 +78,7 @@ else
         if (trabajoId != 0)
         {
             Trabajo = await trabajosServices.Buscar(trabajoId);
+            Lista_TrabajosDetalle = await trabajosServices.BuscarTrabajoDetalle(trabajoId);
         }
     }
 
