@@ -16,7 +16,7 @@ builder.Services.AddScoped<TecnicoServices>();
 builder.Services.AddScoped<TipoTecnicosServices>();
 builder.Services.AddRadzenComponents();
 builder.Services.AddScoped<ClientesServices>();
-builder.Services.AddScoped<TrabajosServices>();
+builder.Services.AddScoped<TrabajoServices>();
 builder.Services.AddScoped<PrioridadesServices>();
 
 var app = builder.Build();

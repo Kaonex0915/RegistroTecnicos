@@ -24,8 +24,8 @@ namespace RegistroTecnicos.Models
         public string? Descripcion { get; set; }
 
         [Required(ErrorMessage ="El monto del trabajo es requerido")]
-        public int Monto { get; set; }
-        
+        public decimal Monto { get; set; }
 
+        public ICollection<TrabajosDetalle> trabajosDetalle { get; set; }
     }
 }
