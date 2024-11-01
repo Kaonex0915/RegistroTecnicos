@@ -1,6 +1,6 @@
 ﻿@page "/Trabajos/Create"
 @page "/Trabajos/Create/{trabajoId:int}"
-@inject TrabajosServices trabajosServices
+@inject TrabajoServices trabajosServices
 @inject NavigationManager navigationManager
 @inject TecnicoServices tecnicoServices
 @inject ClientesServices clientesServices
@@ -86,8 +86,71 @@
                 <InputNumber @bind-Value="Trabajo.Monto" class="form-control" />
                 <ValidationMessage For="@(() => Trabajo.Monto)" />
             </div>
+            <fieldset class="border-success border border-1">
+                <h3>Articulos</h3>
+                <div>
+                    <div class="row">
+                        <div class="col-3">
+                            <label>Producto</label>
+                            <div class="input-group mb-3">
+                                <InputSelect class="form-select" @bind-Value="articuloSeleccionado">
+                                    <option value="0" disabled selected>Seleccione un articulo</option>
+                                    @foreach (var articulo in Lista_Articulos)
+                                    {
+                                        <option value="@articulo.ArticuloId">@articulo.Descripcion</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                        </div>
 
+                        <div class="col-3">
+                            <label>Cantidad</label>
+                            <div class="input-group mb-3">
+                                <InputNumber @bind-Value="TrabajoDetalle.Cantidad" class="form-control"></InputNumber>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label>Precio</label>
+                            <div class="input-group mb-3">
+                                <InputNumber @bind-Value="TrabajoDetalle.Precio" class="form-control"></InputNumber>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <button type="button" @onclick="AgregarDetalle" class="btn btn-outline-primary"><i class="bi bi-plus">Agregar</i></button>
+                        </div>
+
+
+                    </div>
+
+                    <br>
+                    <table class="table table-bordered table-light m-1">
+                        <thead class="thead">
+                            <tr class="table">
+                                <th>Articulo Id</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var trabajoDetalles in Lista_TrabajosDetalle)
+                            {
+                                <tr>
+                                    <td>@trabajoDetalles.ArticuloId</td>
+                                    <td>@trabajoDetalles.Cantidad</td>
+                                    <td>@trabajoDetalles.Precio</td>
+                                    <td><button @onclick="@(() => RemoverDetalle(trabajoDetalles))" class="btn btn-outline-danger" type="button"><i class="bi bi-trash">Eliminar</i></button></td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </fieldset>
         </div>
+
 
         <div class="card-footer bg-light d-flex justify-content-center mt-3">
             <div class="btn-group">
@@ -106,10 +169,14 @@
     [Parameter]
     public int? trabajoId { get; set; }
 
+    public int articuloSeleccionado { get; set; }
     public Trabajos Trabajo { get; set; } = new Trabajos();
     public List<Clientes> Cliente { get; set; } = new List<Clientes>();
     public List<Tecnicos> Tecnico { get; set; } = new List<Tecnicos>();
+    public List<TrabajosDetalle> Lista_TrabajosDetalle { get; set; } = new List<TrabajosDetalle>();
     public List<Prioridades> L_Prioridad { get; set; } = new List<Prioridades>();
+    public TrabajosDetalle TrabajoDetalle { get; set; } = new TrabajosDetalle();
+    public List<Articulos> Lista_Articulos { get; set; } = new List<Articulos>();
 
     private bool Existe = false;
 
@@ -118,6 +185,7 @@
         L_Prioridad = await prioridadesServices.GetPrioridades();         
         Cliente = await clientesServices.GetClientes();
         Tecnico = await tecnicoServices.GetTecnicos();
+        Lista_Articulos = await trabajosServices.GetArticulos();
 
         if (trabajoId != null)
         {
@@ -149,6 +217,7 @@
 
     public async Task Guardar()
     {
+        Trabajo.trabajosDetalle = Lista_TrabajosDetalle;
         var guardo = await trabajosServices.Guardar(this.Trabajo);
         if (guardo != null)
         {
@@ -159,6 +228,40 @@
             notificationService.ShowNotification(titulo: "Error", mensaje: "Ocurrio un error al guardar", NotificationSeverity.Warning);
         }
         Nuevo();
+
+    }
+    public void AgregarDetalle()
+    {
+        var seleccionArticulo = Lista_Articulos
+        .FirstOrDefault(a => a.ArticuloId == articuloSeleccionado);
+
+        if (seleccionArticulo != null && TrabajoDetalle.Cantidad > 0)
+        {
+            TrabajoDetalle.Precio = seleccionArticulo.Precio;
+
+            var detalleNuevo = new TrabajosDetalle
+                {
+                    ArticuloId = seleccionArticulo.ArticuloId,
+                    Cantidad = TrabajoDetalle.Cantidad,
+                    Precio = seleccionArticulo.Precio
+                };
+
+            Trabajo.Monto += detalleNuevo.Cantidad * detalleNuevo.Precio;
+
+            Lista_TrabajosDetalle.Add(detalleNuevo);
+            TrabajoDetalle = new TrabajosDetalle();
+            articuloSeleccionado = 0;
+        }
+    }
+    public void RemoverDetalle(TrabajosDetalle detalleRemover)
+    {
+        Lista_TrabajosDetalle.Remove(detalleRemover);
+
+        Trabajo.Monto -= detalleRemover.Cantidad * detalleRemover.Precio;
+
+        articuloSeleccionado = detalleRemover.ArticuloId;
+        TrabajoDetalle.Cantidad = detalleRemover.Cantidad;
+        TrabajoDetalle.Precio = detalleRemover.Precio;
 
     }
 
