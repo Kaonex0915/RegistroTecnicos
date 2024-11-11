@@ -11,13 +11,14 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 var ConStr = builder.Configuration.GetConnectionString("ConStr");
-builder.Services.AddDbContext<Context>(Options => Options.UseSqlite(ConStr));
+builder.Services.AddDbContextFactory<Context>(Options => Options.UseSqlServer(ConStr));
 builder.Services.AddScoped<TecnicoServices>();
 builder.Services.AddScoped<TipoTecnicosServices>();
 builder.Services.AddRadzenComponents();
 builder.Services.AddScoped<ClientesServices>();
 builder.Services.AddScoped<TrabajoServices>();
 builder.Services.AddScoped<PrioridadesServices>();
+builder.Services.AddScoped<CotizacionServices>();
 
 var app = builder.Build();
 

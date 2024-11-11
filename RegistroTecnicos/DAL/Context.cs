@@ -21,6 +21,10 @@ public class Context : DbContext
 
     public DbSet<Articulos> Articulos { get; set; }
 
+    public DbSet<Cotizaciones> Cotizaciones { get; set; }
+
+    public DbSet<CotizacionesDetalle> cotizacionesDetalle { get; set; }
+
     public DbSet<TrabajosDetalle> TrabajoDetalle { get; set; }
 
      protected override void OnModelCreating(ModelBuilder modelBuilder)

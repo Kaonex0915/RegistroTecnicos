@@ -5,23 +5,20 @@ using System.Linq.Expressions;
 
 namespace RegistroTecnicos.Services
 {
-    public class TrabajoServices
+    public class TrabajoServices(IDbContextFactory<Context> DbFactory)
     {
         private readonly Context _context;
 
-        public TrabajoServices(Context context)
-        {
-            _context = context;
-        }
-
         public async Task<bool> Existe(int trabajoId)
         {
+            await using var _context = await DbFactory.CreateDbContextAsync();
             return await _context.Trabajos.AnyAsync(t => t.TrabajoId == trabajoId);
         }
 
         public async Task<bool> Insertar(Trabajos trabajo)
         {
-            
+            await using var _context = await DbFactory.CreateDbContextAsync();
+
             foreach (var detalle in trabajo.trabajosDetalle)
             {
                 var articulo = await BuscarArticulos(detalle.ArticuloId);
@@ -48,6 +45,7 @@ namespace RegistroTecnicos.Services
 
         private async Task<bool> Modificar(Trabajos trabajo)
         {
+            await using var _context = await DbFactory.CreateDbContextAsync();
             _context.Update(trabajo);
             return await _context
                 .SaveChangesAsync() > 0;
@@ -55,6 +53,7 @@ namespace RegistroTecnicos.Services
 
         public async Task<Trabajos?> Buscar(int trabajoId)
         {
+            await using var _context = await DbFactory.CreateDbContextAsync();
             return await _context.Trabajos
                 .Include(t => t.trabajosDetalle)
                 .AsNoTracking()
@@ -63,6 +62,7 @@ namespace RegistroTecnicos.Services
 
         public async Task<List<Trabajos>> Listar(Expression<Func<Trabajos, bool>> criterio)
         {
+            await using var _context = await DbFactory.CreateDbContextAsync();
             return await _context.Trabajos
                 .Include(t => t.trabajosDetalle)
                 .AsNoTracking()
@@ -72,6 +72,7 @@ namespace RegistroTecnicos.Services
 
         public async Task<List<Articulos>> GetArticulos()
         {
+            await using var _context = await DbFactory.CreateDbContextAsync();
             return await _context.Articulos
                 .AsNoTracking()
                 .ToListAsync();
@@ -79,6 +80,7 @@ namespace RegistroTecnicos.Services
 
         public async Task<Articulos> BuscarArticulos(int id)
         {
+            await using var _context = await DbFactory.CreateDbContextAsync();
             return await _context.Articulos
                 .AsNoTracking()
                 .FirstOrDefaultAsync(a => a.ArticuloId == id);
@@ -86,6 +88,7 @@ namespace RegistroTecnicos.Services
 
         public async Task<bool> ActualizarArticulo(Articulos articulo)
         {
+            await using var _context = await DbFactory.CreateDbContextAsync();
             _context.Articulos.Update(articulo);
             return await _context
                 .SaveChangesAsync() > 0;
@@ -93,6 +96,7 @@ namespace RegistroTecnicos.Services
 
         public async Task<bool> Guardar(Trabajos trabajo)
         {
+            await using var _context = await DbFactory.CreateDbContextAsync();
             if (!await Existe(trabajo.TrabajoId))
             { 
                 return await Insertar(trabajo);
@@ -103,6 +107,7 @@ namespace RegistroTecnicos.Services
 
         public async Task<List<TrabajosDetalle>> BuscarTrabajoDetalle(int trabajoId)
         {
+            await using var _context = await DbFactory.CreateDbContextAsync();
             return await _context.TrabajoDetalle
                 .Include(a => a.Articulos)
                 .Where(t => t.TrabajoId == trabajoId)
@@ -112,6 +117,7 @@ namespace RegistroTecnicos.Services
 
         public async Task<bool> Eliminar(int trabajoId)
         {
+            await using var _context = await DbFactory.CreateDbContextAsync();
             var detalles = await BuscarTrabajoDetalle(trabajoId);
 
             foreach (var detalle in detalles)
@@ -132,6 +138,7 @@ namespace RegistroTecnicos.Services
 
         public async Task<List<TrabajosDetalle>> ListarTrabajoDetalle(int trabajoId)
         {
+            await using var _context = await DbFactory.CreateDbContextAsync();
             var detalle = await _context.TrabajoDetalle
                 .Where(d => d.TrabajoId == trabajoId)
                 .ToListAsync();
